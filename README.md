@@ -4,7 +4,9 @@ Instructions to run:
 Download the file and extract, then open a command line terminal.
 Navigate to the folder "Flatworks-main" and type the following:
 env/Scripts/activate.bat
+pip install -r requirements.txt
 python manage.py runserver
+
 
 Follow the given link: http://127.0.0.1:8000/
 
