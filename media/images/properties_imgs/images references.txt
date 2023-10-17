@@ -1,0 +1,6 @@
+House = https://pixabay.com/photos/ancient-architecture-beautiful-70996/ 
+House_2 = https://pixabay.com/photos/house-garage-driveway-architecture-1867187/ 
+Flat = https://pixabay.com/photos/balcony-building-apartment-2497684/ 
+Flat_2 = https://pixabay.com/photos/apartments-building-residential-4931615/ 
+Studio = https://pixabay.com/photos/powai-flats-real-estate-real-estate-2489465/ 
+no_image = https://st4.depositphotos.com/14953852/22772/v/600/depositphotos_227725020-stock-illustration-image-available-icon-flat-vector.jpg 

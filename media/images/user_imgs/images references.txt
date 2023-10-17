@@ -1,0 +1,3 @@
+Random_woman = https://pixabay.com/illustrations/woman-turban-head-profile-7045658/
+Tiger = https://pixabay.com/illustrations/tiger-the-animal-nature-painting-3039280/
+Dog = https://pixabay.com/photos/animal-dog-german-shepherd-dog-3473313/
