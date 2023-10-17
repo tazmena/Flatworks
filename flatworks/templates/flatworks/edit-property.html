@@ -1,0 +1,83 @@
+<!-- Extends the maintemp html -->
+{% extends 'flatworks/layouts/maintemp.html' %}
+
+
+<!-- This makes the title of the page edit property and can be seen at the tab -->
+{% block title %}
+Edit Property
+{% endblock title %}
+
+<!-- This is the contents of the page -->
+{% block content %}
+	<!-- This loads the static from the server for the css, js and media -->
+	{% load static %}
+		<link rel="stylesheet" href="{% static 'css/nav.css' %}">
+		<script src="{% static 'js/nav2.js' %}"></script>
+		<link rel="stylesheet" href="{% static 'css/add_prop.css' %}"> 
+		
+	<!-- This is the head of the page and is the navbar of the page with the nav css and js working with it  -->
+	<head>
+		<div id="navigation" class = "navbar">
+			<ul id="navBar" >
+				<div id="navbar-left">
+					<!-- These are the links to other parts of the app -->
+					<li><a id = "filter" href="{% url 'filter' %}">Find Properties</a></li>
+					<li><a id = "add" href="{% url 'add-prop' %}">Add Property</a></li>
+					<li><a id = "see" href="{% url 'see-prop' %}">See Your Properties</a></li>
+					<li><a id = "profile" href="{% url 'see-prof' %}">My Profile</a></li>
+					<li><a id = "logout" href="{% url 'log-out' %}">Log Out</a></li>
+				</div>
+			</ul>
+		</div>
+	</head>
+
+	<body>
+		<!-- This outputs the messages if they exist -->
+		{% for message in messages %}
+			<div align = "center" class="alert alert-success" style = "font-weight:bold;font-size:30px" >
+				<a class="close" href="#" data-dismiss="alert"></a>
+				   {{ message }}
+			</div>
+		{% endfor %}
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<form name ="update" method="POST" enctype="multipart/form-data">
+						<!-- Makes the form valid for django -->
+						{% csrf_token %}
+						<fieldset >
+							<h2 id = 'head' style = "color: #d9f1ff;font-weight:bold;">Edit Property</h2>
+							<!-- For each field in the form outputs the current fields of the data and their labels -->
+							{% for field in form %}
+							<br>
+								<div align = "center"  style = "color: #d9f1ff;" class="fieldWrapper">
+									{{ field.errors }}
+									{{ field.label_tag }}  
+									{{ field }}<br><br>
+									{% if field.help_text %}
+									<p class="help">{{ field.help_text|safe }}</p>
+									{% endif %}
+								</div>
+							{% endfor %}
+							<br><br>
+							
+							<!-- If an image doesn't exist then allows the client to upload a photo otherwise shows the image they have uploaded with a delete button,  -->
+							{% if image.image_file == None %}
+								{{image_form.as_p}}
+							{% else %}
+								<img src="{{image.image_file.url}}" style="width:25%">
+								<form id="forms" name="Delete" method="POST" action = "" >{% csrf_token %}
+								<p><button name = "delete" value = "{{image.id}}" style = "font-weight:bold; background-color:red; color:black;" >Delete Picture</button></p>
+								</form>
+							{% endif %}
+							
+							<!-- If submitted then the form sends the data to the server side -->
+							<br><br><button type="submit" class="btn btn-primary btn-sm" value=""> Update</button>
+						</fieldset >
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+
+{% endblock content %}

@@ -1,0 +1,131 @@
+<!-- Extends the maintemp html -->
+{% extends 'flatworks/layouts/maintemp.html' %}
+
+
+<!-- This makes the title of the page see your properties and can be seen at the tab -->
+{% block title %}
+See Your Properties
+{% endblock title %}
+
+<!-- This is the contents of the page -->
+{% block content %}
+	<!-- This loads the static from the server for the css, js and media -->
+	{% load static %}
+		<link rel="stylesheet" href="{% static 'css/nav.css' %}">
+		<script src="{% static 'js/nav.js' %}"></script>
+		
+	<!-- This is the head of the page and is the navbar of the page with the nav css and js working with it  -->
+	<head>
+		<div id="navigation" class = "navbar">
+			<ul id="navBar" >
+				<div id="navbar-left">
+					<!-- These are the links to other parts of the app -->
+					<li><a id = "add" href="{% url 'add-prop' %}">Add Property</a></li>
+					<li><a class="active" id = "see" href="{% url 'see-prop' %}">See Your Properties</a></li>
+					<li><a id = "profile" href="{% url 'see-prof' %}">My Profile</a></li>
+					<li><a id = "logout" href="{% url 'log-out' %}">Log Out</a></li>
+				</div>
+			</ul>
+		</div>
+	</head>
+
+	<body>
+				
+		<div align = "left" style = "color: #d9f1ff; background-color: #1357a6; border-radius: 5px; position: absolute; left: 20%;  padding: 10px; width:60%; top:30%;" id = "property">
+			<ul>
+				<h1 align = "center" >Your Properties</h1><br><br><br>
+				
+				<!-- For each data from the properties does the following -->
+				{% for info in form%}
+					
+					<!-- This ensures if there is an image outputs the image -->
+					{% for picture in image%}
+						{%if picture.property_id == info.id %}
+							<img style="width:20%; float: left;" src="{{picture.image_file.url}}"/>
+						{%endif%}
+					{% endfor %}
+
+
+					<!-- This outputs property name -->
+					Property Name: {{ info.property_name }}
+					
+					<!-- This outputs cost of property -->
+					<br>Cost(of that countries currency):{{ info.property_cost }}
+
+					<!-- This outputs property address given -->
+					<br>Address:{{info.property_address}}, {{info.property_city}}, {{info.property_country}},{{info.property_postal_code}}
+
+					<!-- This outputs type of property based on the property_type of the data, if it's 1 then house, it it's 2 then flat and if it's 3 then studio -->
+					<br>Type Of Property: 
+					{% if info.property_type == 1 %}
+						House
+					{% elif info.property_type == 2 %}
+						Flat
+					{% elif info.property_type == 3 %}
+						Studio
+					{% endif %}
+					
+					<!-- This outputs number of rooms of the property -->
+					<br>Number Of Rooms: {{info.property_number_of_rooms}}
+					
+					<!-- This outputs if it's accessible to wheelchair based on property_accessibility_lift of that data, no if 0 otherwise yes -->
+					<br>Accessible To Wheelchairs: 
+					{% if info.property_accessibility_wheelchair == 0 %}
+						No
+					{%else%}
+						Yes
+					{%endif%}
+					
+					<!-- This outputs if it has a lift based on property_accessibility_lift of that data, no if 0 otherwise yes -->
+					<br>Lift Avaliable: 
+					{% if info.property_accessibility_lift == 0 %}
+						No
+					{%else%}
+						Yes
+					{%endif%}
+					
+					<!-- This outputs if it's already furnished based on property_furnished of that data, no if 0 otherwise yes -->
+					<br>Already Furnished: 
+					{% if info.property_furnished == 0 %}
+						No
+					{%else%}
+						Yes
+					{%endif%}
+					
+					<!-- This outputs if it's allowed animals based on property_animal_allowance of that data, no if 0 otherwise yes -->
+					<br>Allowed Animals: 
+					{% if info.property_animal_allowance == 0 %}
+						No
+					{%else%}
+						Yes
+					{%endif%}
+					
+					<!-- This outputs if it has a shared kitchen or bathroom based on property_communal_spaces of that data, no if 0 otherwise yes -->
+					<br>Shared Kitchen/Bathroom: 
+					{% if info.property_communal_spaces == 0 %}
+						No
+					{%else%}
+						Yes
+					{%endif%}
+					
+					<!-- This outputs the extra information given from data using property_information -->
+					<br>Property Extra Information: {{info.property_information}}
+					
+					<!-- This is the button for edit -->
+					<br><br><form style = "width:10%;" id="forms" name="filter" method="POST">
+						{% csrf_token %}
+						<button name="edit" style ="position: absolute; left: 50%; background-color:orange; color:black; font-weight:bold;"input type="submit" value ="{{info.id}}"  >Edit</button><br>
+					</form>
+					
+					<!-- This is the button for delete -->
+					<form style = "width:13%;" id="forms" name="filter" method="POST">
+						{% csrf_token %}
+						<button name="delete" style ="position: absolute; left:50%; background-color:#93ee7d; color:black; font-weight:bold;"input type="submit" value ="{{info.id}}" >Delete</button><br><br>
+					</form>
+					
+					<hr size="8" width="80%" color="#d9f1ff">  <br><br>
+				{% endfor %}
+			</ul>	
+		</div>
+	</body>
+{% endblock content %}

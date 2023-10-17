@@ -1,0 +1,82 @@
+<!-- Extends the maintemp html -->
+{% extends 'flatworks/layouts/maintemp.html' %}
+
+
+<!-- This makes the title of the page edit profile and can be seen at the tab -->
+{% block title %}
+Edit Profile
+{% endblock title %}
+
+<!-- This is the contents of the page -->
+{% block content %}
+	<!-- This loads the static from the server for the css, js and media -->
+	{% load static %}
+		<link rel="stylesheet" href="{% static 'css/nav.css' %}">
+		<link rel="stylesheet" href="{% static 'css/see-prof.css' %}">
+	
+	
+	<!-- This is the head of the page and is the navbar of the page with the nav css and js working with it  -->
+	<head>
+		<div id="navigation" class = "navbar">
+			<ul id="navBar" >
+				<div id="navbar-left">
+					<!-- These are the links to other parts of the app -->
+					<li><a id = "filter" href="{% url 'filter' %}">Find Properties</a></li>
+					<li><a id = "add" href="{% url 'add-prop' %}">Add Property</a></li>
+					<li><a id = "see" href="{% url 'see-prop' %}">See Your Properties</a></li>
+					<li><a id = "profile" href="{% url 'see-prof' %}">My Profile</a></li>
+					<li><a id = "logout" href="{% url 'log-out' %}">Log Out</a></li>
+				</div>
+			</ul>
+		</div>
+	</head>
+
+	<body>
+		<div class="card">
+			<form align = "center" name ="update" method="POST" enctype="multipart/form-data">
+				<!-- Makes form valid in django -->
+				{% csrf_token %}
+				<h2 id = 'head' style = "font-weight:bold;">Edit Profile</h2>
+				
+				<!-- This outputs the messages if there are any -->
+				{% for message in messages %}
+					<div class="alert alert-success">
+						<a class="close" href="#" data-dismiss="alert"></a>
+						   {{ message }}
+					</div>
+				{% endfor %}
+				
+				<!-- This outputs the fields in the form with their values from the data -->
+				{% for field in form %}
+				
+				<br>
+					<div   class="fieldWrapper">
+						{{ field.errors }}
+						{{ field.label_tag }}  
+						{{ field }}<br><br>
+						{% if field.help_text %}
+						<p class="help">{{ field.help_text|safe }}</p>
+						{% endif %}
+					</div>
+				{% endfor %}
+				<br><br>
+				
+				<!-- This outputs upload file if there in no image but if there is outputs image with delete button -->
+				{% if image.image_file == None %}
+					{{image_form.as_p}}
+				{% else %}
+				<img src="{{image.image_file.url}}" style="width:100%">
+				<form id="forms" name="Delete" method="POST" >
+					<!-- This ensures form is valid in django and allows for delete picture to happen -->
+					{% csrf_token %}
+					<p><button name = "delete" value = "{{image.id}}" style = "font-weight:bold; background-color:red; color:black;" >Delete Picture</button></p>
+				</form>
+				{% endif %}
+				
+				<!-- When pressed allows for update form to happen -->
+				<br><br><button name = "update" type="submit" value="{{image.id}}"> Update</button>
+			</form>
+		</div>
+	</body>
+
+{% endblock content %}

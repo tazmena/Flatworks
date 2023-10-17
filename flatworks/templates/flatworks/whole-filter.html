@@ -1,0 +1,375 @@
+<!-- Extends the maintemp html -->
+{% extends 'flatworks/layouts/maintemp.html' %}
+
+<!-- This makes the title of the page filter + results and can be seen at the tab -->
+{% block title %}
+Filter + Results
+{% endblock title %}
+
+<!-- This is the contents of the page -->
+{% block content %}
+	<!-- This loads the static from the server for the css, js and media -->
+	{% load static %}
+		<link rel="stylesheet" href="{% static 'css/filter.css' %}">
+		<link rel="stylesheet" href="{% static 'css/nav.css' %}">
+		<script src="{% static 'js/nav.js' %}"></script>
+		<script src="{% static 'js/slider.js' %}"></script>
+		
+	<!-- This is the head of the page and is the navbar of the page with the nav css and js working with it  -->
+	<head>
+		<div id="navigation" class = "navbar">
+			<ul id="navBar" >
+				<div id="navbar-left">
+					<!-- These are the links to other parts of the app -->
+					<li><a class="active" id = "filter" href="{% url 'filter' %}">Find Properties</a></li>
+					<li><a id = "add" href="{% url 'add-prop' %}">Add Property</a></li>
+					<li><a id = "see" href="{% url 'see-prop' %}">See Your Properties</a></li>
+					<li><a id = "profile" href="{% url 'see-prof' %}">My Profile</a></li>
+					<li><a id = "logout" href="{% url 'log-out' %}">Log Out</a></li>
+				</div>
+			</ul>
+		</div>
+	</head>
+	
+	<body>
+    <div style = "padding: 75px;
+		text-align: left;"id="filters">
+		<form style = "border-radius: 5px; background-color: #1357a6; padding: 10px; height: 1150px; width: 30%; position: absolute; right: 67%; top:30%;"id="form1" name="filter" method="POST" > <!-- form used to take in user input-->
+			<!-- This makes the form valid in django -->
+			{% csrf_token %}
+			
+			<fieldset style = "border: 3px solid #1b7ced; padding: 20px; height: 1100px; width: 88%;" id="field1">
+				<h2 style = "color: #d9f1ff; font-size: 1.5em; font-weight: bolder; text-align: center;"id="filterHead">Search properties for sale and to rent:</h2>
+				
+				<!-- This outputs the cost minimum using the values inputted from the previous search filter and is a slider that uses css and js with min being 0 and max being 5000 -->
+				<div class="slidecontainer" >
+					<label class = "cost" for="cost">Cost Minimum:</label><br>
+					<br><span class = "value" id="slider" style = "color: #d9f1ff;font-weight:bold;">{{given_filter.cost_min}}</span>
+					
+					
+					<br><br><input type="range" min=0 max= 5000 step="1" name="cost_min" value="{{given_filter.cost_min}}" onchange="min_value(this.value)" class = "slider" id="slider_info_min"> 
+				<br><br><br>
+				</div>
+
+
+				<!-- This outputs the cost maximum using the values inputted from the previous search filter and is a slider that uses css and js with min being 0 and max being 5000 -->
+				<div class="slidecontainer" >
+					<label class = "cost" for="cost">Cost Maximum:</label><br>
+					<br><span class = "value2" id="slider2" style = "color: #d9f1ff;font-weight:bold;">{{given_filter.cost_max}}</span>
+
+					<br><br><input type="range"  min = 0 max = 5000 step="1" name="cost_max" value= "{{given_filter.cost_max}}" onchange="max_value(this.value)" class = "slider" id="slider_info_max"> 
+					<br><br><br>
+				</div>
+
+				
+				<!-- This creates the location input and it's the only requirment for filtering and has the previous value from filter -->
+				<div class="location">
+					<label for="location">Location</label>
+					<input value = "{{given_filter.location}}" type="text" name="location" required><br><br><br>
+					
+					
+					<!-- This is for the distance and is a drop down list of options but is linked to location and selects the option previously selected-->
+					<label for="distance">Distance:</label>
+					<select name="distance" id="distance">
+					{% if given_filter.distance == "5" %}
+						<option value="5" selected>5km</option>
+						<option value="10">10km</option>
+						<option value="15">15km</option>
+						<option value="20">20km</option>
+					{% elif given_filter.distance == "10" %}
+						<option value="5">5km</option>
+						<option value="10" selected>10km</option>
+						<option value="15">15km</option>
+						<option value="20">20km</option>
+					{% elif given_filter.distance == "15" %}
+						<option value="5">5km</option>
+						<option value="10">10km</option>
+						<option value="15" selected>15km</option>
+						<option value="20">20km</option>
+					{% elif given_filter.distance == "20" %}
+						<option value="5">5km</option>
+						<option value="10">10km</option>
+						<option value="15">15km</option>
+						<option value="20" selected>20km</option>
+					{% endif %}
+					</select><br><br><br>
+				</div>
+				
+				
+				
+				<!-- This creates the accessibility choices with the previous boxes selected if they were checked -->
+				<div class="accessible">
+					{% if given_filter.wheelchair == "1" %}
+						<label for="accessibility">Accessibility:</label><br>
+						<input type="radio" name="wheelchair" value="1" checked />
+						<label for="nowheelchair">Wheelchair</label>
+						<input type="radio" name="wheelchair" value="0" />
+						<label for="wheelchair">No Wheelchair</label><br><br>
+					{% elif given_filter.wheelchair == "0"%}
+						<label for="accessibility">Accessibility:</label><br>
+						<input type="radio" name="wheelchair" value="1" />
+						<label for="nowheelchair">Wheelchair</label>
+						<input type="radio" name="wheelchair" value="0" checked />
+						<label for="wheelchair">No Wheelchair</label><br><br>
+					{% else %}
+						<label for="accessibility">Accessibility:</label><br>
+						<input type="radio" name="wheelchair" value="1" />
+						<label for="nowheelchair">Wheelchair</label>
+						<input type="radio" name="wheelchair" value="0" />
+						<label for="wheelchair">No Wheelchair</label><br><br>
+					{% endif %}
+				
+				
+					{% if given_filter.lift == "1" %}
+						<input type="radio" name="lift" value="1" checked />
+						<label for="lift">Lift</label>
+						<input type="radio" name="lift" value="0" />
+						<label for="nolift">No Lift</label><br><br>
+					{% elif given_filter.lift == "0" %}
+						<input type="radio" name="lift" value="1" />
+						<label for="lift">Lift</label>
+						<input type="radio" name="lift" value="0" checked />
+						<label for="nolift">No Lift</label><br><br>
+					{% else %}
+						<input type="radio" name="lift" value="1" />
+						<label for="lift">Lift</label>
+						<input type="radio" name="lift" value="0" />
+						<label for="nolift">No Lift</label><br><br>
+					{% endif %}
+				</div>
+				
+				
+				<!-- This creates the type of property choices with the previous boxes checked if they were checked -->
+				<div class="propertyType">
+					{% if given_filter.house == "1" %}
+						<label for="propType">Type Of Property:</label><br>
+						<input type="hidden" name="house" value="0" />
+						<input type="checkbox" name="house" value="1" checked / >
+						<label for="house">House</label>
+					{% else %}
+						<label for="propType">Type Of Property:</label><br>
+						<input type="hidden" name="house" value="0" checked />
+						<input type="checkbox" name="house" value="1" />
+						<label for="house">House</label>
+					{% endif %}
+
+
+					{% if given_filter.flat == "2" %}
+						<input type="hidden" name="flat" value="0" />
+						<input type="checkbox" name="flat" value="2" checked />
+						<label for="flat">Flat</label>
+					{% else %}
+						<input type="hidden" name="flat" value="0" checked />
+						<input type="checkbox" name="flat" value="2" />
+						<label for="flat">Flat</label>
+					{% endif %}
+
+
+					{% if given_filter.studio == "3" %}
+						<input type="hidden" name="studio" value="0" />
+						<input type="checkbox" name="studio" value="3"checked />
+						<label for="studio">Studio</label><br><br>
+					{% else %}
+						<input type="hidden" name="studio" value="0" checked />
+						<input type="checkbox" name="studio" value="3"/>
+						<label for="studio">Studio</label><br><br>
+					{% endif %}
+					
+				</div>
+				
+				
+				<!-- This creates a checkbox for if the property is furnished with the previous boxes checked if they were checked -->
+				<div class="furnished">
+					{% if given_filter.furnished == "1" %}
+						<label for="furnishing">Furnishing:</label><br>
+						<input type="radio" name="furnished" value="1" checked />
+						<label for="furnished">Furnished</label>
+						<input type="radio" name="furnished" value="0"/>
+						<label for="unfurnished">Unfurnished</label><br><br>
+					
+					{% elif given_filter.furnished == "0" %}
+						<label for="furnishing">Furnishing:</label><br>
+						<input type="radio" name="furnished" value="1"/>
+						<label for="furnished">Furnished</label>
+						<input type="radio" name="furnished" value="0" checked />
+						<label for="unfurnished">Unfurnished</label><br><br>
+					{% else %}
+						<label for="furnishing">Furnishing:</label><br>
+						<input type="radio" name="furnished" value="1"/>
+						<label for="furnished">Furnished</label>
+						<input type="radio" name="furnished" value="0" />
+						<label for="unfurnished">Unfurnished</label><br><br>
+					{% endif %}
+				</div>
+				
+				
+				<!-- This creates input for minimum amount of rooms with the previous amount inputted -->
+				<div class="rooms">
+					<label for="min_noofrooms">Minimum Number of Rooms:</label>
+					<input value = "{{given_filter.min_noofrooms}}" type="text" name="min_noofrooms" /><br><br>
+				</div>
+				
+				<!-- This creates input for maximum amount of rooms with the previous amount inputted -->
+				<div class="rooms">
+					<label for="max_noofrooms">Maximum Number of Rooms:</label>
+					<input value = "{{given_filter.max_noofrooms}}" type="text" name="max_noofrooms" /><br><br>
+				</div>
+				
+				
+				<!-- This creates the checkbox for animals allowed with the previous boxes checked if they were checked -->
+				<div class="allowedanimals">
+				{% if given_filter.animalallowance == "1" %}
+					<label for="animalallowance">Animal Allowance:</label><br><br>
+					<input type="radio" name="animalallowance" value="1" checked />
+					<label for="animalallowance">Animal Allowance</label><br><br>
+					<input type="radio" name="animalallowance" value="0"/>
+					<label for="noanimalallowance">No Animal Allowance</label><br><br>
+				{% elif given_filter.animalallowance == "0" %}
+					<label for="animalallowance">Animal Allowance:</label><br><br>
+					<input type="radio" name="animalallowance" value="1"/>
+					<label for="animalallowance">Animal Allowance</label><br><br>
+					<input type="radio" name="animalallowance" value="0" checked />
+					<label for="noanimalallowance">No Animal Allowance</label><br><br>
+				{% else %}
+					<label for="animalallowance">Animal Allowance:</label><br><br>
+					<input type="radio" name="animalallowance" value="1"/>
+					<label for="animalallowance">Animal Allowance</label><br><br>
+					<input type="radio" name="animalallowance" value="0" />
+					<label for="noanimalallowance">No Animal Allowance</label><br><br>
+				{% endif %}
+				</div>
+				
+				
+				<!-- This creates the checkbox for communal spaces with the previous boxes checked if they were checked -->
+				<div class="communalspaces">
+					{% if given_filter.communalspaces == "1" %}
+						<label for="communalspaces">Communal Spaces:</label><br><br>
+						<input type="radio" name="communalspaces" value="1" checked />
+						<label for="animalallowance">Communal Spaces</label><br><br>
+						<input type="radio" name="communalspaces" value="0"/>
+						<label for="communalspaces">No Communal Spaces</label><br><br><br>
+					{% elif given_filter.communalspaces == "0" %}
+						<label for="communalspaces">Communal Spaces:</label><br><br>
+						<input type="radio" name="communalspaces" value="1"/>
+						<label for="animalallowance">Communal Spaces</label><br><br>
+						<input type="radio" name="communalspaces" value="0" checked />
+						<label for="communalspaces">No Communal Spaces</label><br><br><br>
+					{% else %}
+						<label for="communalspaces">Communal Spaces:</label><br><br>
+						<input type="radio" name="communalspaces" value="1"/>
+						<label for="animalallowance">Shared Kitchen/Bathroom</label><br><br>
+						<input type="radio" name="communalspaces" value="0" />
+						<label for="communalspaces">No Shared Kitchen/Bathroom</label><br><br><br>
+					{% endif %}
+				</div>
+				
+				<!-- When this is chosen then all the information above is sent to server to be processed -->
+				<button id="submitfilters" input type="submit">Filter</button>
+			</fieldset>
+		</form>
+	</div>
+	
+	<div id="property_results">
+		<h1>Search Results</h1>
+			<ul>
+				<!-- This creates a loop for each object in list -->
+				{% for info in object_list %}
+					<br>
+					<!-- This checks if there is an image and if there is one that belongs to the property then outputs it -->
+					{% for picture in image%}
+						{%if picture.property_id == info.id %}
+							<img style="width:20%; float: left;" src="{{picture.image_file.url}}"/>
+						{%endif%}
+					{% endfor %}
+					
+					<!-- These output the object variable name assigned to it -->
+					
+					<!-- This outputs the property name of the object -->
+					Property Name: {{ info.property_name }}
+					
+					<!-- This outputs the cost of the object -->
+					<br>Cost(of that countries currency):{{ info.property_cost }}
+					
+					<!-- This outputs the address of the object -->
+					<br>Address:{{info.property_address}}, {{info.property_city}}, {{info.property_country}},{{info.property_postal_code}}
+
+					<!-- If the type of property is 1 then outputs house, 2 then outputs flat and 3 then outputs studio -->
+					<br>Type Of Property: 
+					{% if info.property_type == 1 %}
+						House
+					{% elif info.property_type == 2 %}
+						Flat
+					{% elif info.property_type == 3 %}
+						Studio
+					{% endif %}
+					
+					<!-- This outputs the number of rooms -->
+					<br>Number Of Rooms: {{info.property_number_of_rooms}}
+					
+					<!-- This outputs no if it is not accessible to wheelchairs and yes if it is using the object -->
+					<br>Accessible To Wheelchairs: 
+					{% if info.property_accessibility_wheelchair == 0 %}
+						No
+					{%else%}
+						Yes
+					{%endif%}
+					
+					<!-- This outputs no if it doesn't have a lift and yes if it does -->
+					<br>Lift Avaliable: 
+					{% if info.property_accessibility_lift == 0 %}
+						No
+					{%else%}
+						Yes
+					{%endif%}
+					
+					<!-- This outputs no if it is not already furnished and yes if it is -->
+					<br>Already Furnished: 
+					{% if info.property_furnished == 0 %}
+						No
+					{%else%}
+						Yes
+					{%endif%}
+					
+					<!-- This outputs no if it does not allow animals and yes if it does -->
+					<br>Allowed Animals: 
+					{% if info.property_animal_allowance == 0 %}
+						No
+					{%else%}
+						Yes
+					{%endif%}
+					
+					<!-- This outputs no if it does not have a shared bathroom/kitchen and yes if it is does -->
+					<br>Shared Kitchen/Bathroom: 
+					{% if info.property_furnished == 0 %}
+						No
+					{%else%}
+						Yes
+					{%endif%}
+					
+					<!-- This outputs any extra information about the property, if it doesn't have any then outputs no information avaliable -->
+					<br>Property Extra Information: 
+					{% if info.property_information == "" %}
+						No information avaliable <br><br><br>
+					{%else%}
+						{{info.property_information}} <br><br><br>
+					{%endif%}
+					
+					
+					<!-- If there is no url, outputs a button for see profile which links the user to the profile, if there is a url, outputs a button for see site which opens a new window with that url -->
+					{% if info.property_url == None%}
+						<form id="forms" name="filter" method="POST" action = "" />
+							{% csrf_token %}
+							<button name="see-profile" style ="position: absolute; left:70%; background-color:purple; color:yellow; font-weight:bold;"input type="submit" value ="{{info.property_user_id}}">See Profile</button><br> <br> <br> 
+						</form>
+						<hr align = "center" size="8" width="80%" color="#d9f1ff" />  <br><br>
+					{% else %}
+						<button name="see-site" style ="position: absolute; left:70%; background-color:purple; color:yellow; font-weight:bold;"input type="submit" onClick = "parent.open('{{info.property_url}}')">See Site</button><br> <br> <br> 
+						<hr align = "center" size="8" width="80%" color="#d9f1ff" />  <br><br>
+					{% endif %}
+				{% endfor %}
+			</ul>
+		</div>
+	</body>
+
+
+{% endblock content %}

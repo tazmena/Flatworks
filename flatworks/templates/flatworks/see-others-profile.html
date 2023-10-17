@@ -1,0 +1,86 @@
+<!-- Extends the maintemp html -->
+{% extends 'flatworks/layouts/maintemp.html' %}
+
+
+<!-- This makes the title of the page the other user's name profile and can be seen at the tab -->
+{% block title %}
+{{form.full_name}}'s Profile
+{% endblock title %}
+
+<!-- This is the contents of the page -->
+{% block content %}
+	<!-- This loads the static from the server for the css, js and media -->
+	{% load static %}
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="{% static 'css/see-prof.css' %}">
+		<link rel="stylesheet" href="{% static 'css/nav.css' %}">
+		
+	<!-- This is the head of the page and is the navbar of the page with the nav css and js working with it  -->
+	<head>
+		<div id="navigation" class = "navbar">
+			<ul id="navBar" >
+				<div id="navbar-left">
+					<!-- These are the links to other parts of the app -->
+					<li><a id = "filter" href="{% url 'filter' %}">Find Properties</a></li>
+					<li><a id = "add" href="{% url 'add-prop' %}">Add Property</a></li>
+					<li><a id = "see" href="{% url 'see-prop' %}">See Your Properties</a></li>
+					<li><a id = "profile" href="{% url 'see-prof' %}">My Profile</a></li>
+					<li><a id = "logout" href="{% url 'log-out' %}">Log Out</a></li>
+				</div>
+			</ul>
+		</div>
+	</head>
+
+	<body>
+		<div class="card">
+			{% if image.image_file == None %}
+				<img src="/media/images/user_imgs/no_image.jpg" style="width:100%">
+			{% else %}
+				<img src="{{image.image_file.url}}" style="width:100%">
+			{% endif %}
+			
+			<h1 class="name ">Name: {{form.full_name}}</h1> <!--this should get the name from the data base-->
+			
+			{% if form.user_type == 1 %}
+				<p class="title">Title Of User: FDM Consultant</p>
+			{% elif form.user_type == 2 %}
+				<p class="title">Title Of User: Landlord</p>
+			{% elif form.user_type == 3 %}
+				<p class="title">Title Of User: Developer</p>
+			{% endif %}
+			
+			<p class="Email">E-Mail: {{form.email}}</p><!--This should get the email from the data base -->
+			
+			{% if form.phone_number == "0" %}
+				<p class="location">Phone Number: Unknown</p>
+			{% elif form.phone_number == None%}
+				<p class="location">Phone Number: Unknown</p>
+			{% elif form.phone_number == ""%}
+				<p class="location">Phone Number: Unknown</p>
+			{%else%}
+				<p class="location">Phone Number: {{form.phone_number}}</p><!--This should get the location from the data base -->
+			{% endif %}
+			
+			{% if form.location == "0" %}
+				<p class="location">Location: Unknown</p>
+			{% elif form.location == None%}
+				<p class="location">Location: Unknown</p>
+			{% elif form.location == "" %}
+				<p class="location">Location: Unknown</p>
+			{%else%}
+				<p class="location">Location: {{form.location}}</p><!--This should get the location from the data base -->
+			{% endif %}
+			
+			<form id="forms" name="Block" method="POST" >
+				{% csrf_token %}
+				<p><button name = "block" value = "{{form.id}}" class="sidebyside">Block User</button></p><!-- This blocks a user is blocked -->
+			</form>
+			<form id="forms" name="Report" method="POST" >
+				{% csrf_token %}
+				<p><button name = "report" value = "{{form.id}}" class="sidebyside2">Report User</button></p><!-- This reports a user -->
+			</form>
+		</div> 
+	</body>
+
+{% endblock content %}

@@ -1,0 +1,97 @@
+<!-- Extends the maintemp html -->
+{% extends 'flatworks/layouts/maintemp.html' %}
+
+
+<!-- This makes the title of the page my profile and can be seen at the tab -->
+{% block title %}
+My Profile
+{% endblock title %}
+
+<!-- This is the contents of the page -->
+{% block content %}
+	<!-- This loads the static from the server for the css, js and media -->
+	{% load static %}
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="{% static 'css/see-prof.css' %}">
+		<link rel="stylesheet" href="{% static 'css/nav.css' %}">
+		
+	<!-- This is the head of the page and is the navbar of the page with the nav css and js working with it  -->
+	<head>
+		<div id="navigation" class = "navbar">
+			<ul id="navBar" >
+				<div id="navbar-left">
+					<!-- These are the links to other parts of the app -->
+					<li><a id = "add" href="{% url 'add-prop' %}">Add Property</a></li>
+					<li><a id = "see" href="{% url 'see-prop' %}">See Your Properties</a></li>
+					<li><a class="active" id = "profile" href="{% url 'see-prof' %}">My Profile</a></li>
+					<li><a id = "logout" href="{% url 'log-out' %}">Log Out</a></li>
+				</div>
+			</ul>
+		</div>
+	</head>
+	  
+	</head>
+
+	<body>
+
+		<div class="card">
+			<!-- If there is no image outputs no_image.jpg, otherwise outputs image file of that property -->
+			{% if image.image_file == None %}
+				<img src="/media/images/user_imgs/no_image.jpg" style="width:100%">
+			{% else %}
+				<img src="{{image.image_file.url}}" style="width:100%">
+			{% endif %}
+
+			<h1 class="name ">Name: {{form.full_name}}</h1> <!--thisnshould get the name from the data base-->
+			
+			<!-- Outputs fdm consultant if user type is 1, landlord if user type is 2, title of user if user type is 3 -->
+			{% if form.user_type == 1 %}
+				<p class="title">Title Of User: FDM Consultant</p>
+			{% elif form.user_type == 2 %}
+				<p class="title">Title Of User: Landlord</p>
+			{% elif form.user_type == 3 %}
+				<p class="title">Title Of User: Developer</p>
+			{% endif %}
+			
+			<!-- Outputs email of user -->
+			<p class="Email">E-Mail: {{form.email}}</p><!--This should get the email from the data base -->
+			
+			<!-- Outputs phone number, unknown if it's 0, None or empty string -->
+			{% if form.phone_number == "0" %}
+				<p class="location">Phone Number: Unknown</p><!--This should get the location from the data base -->
+			{% elif form.phone_number == None%}
+				<p class="location">Phone Number: Unknown</p><!--This should get the location from the data base -->
+			{% elif form.phone_number == ""%}
+				<p class="location">Phone Number: Unknown</p><!--This should get the location from the data base -->
+			{%else%}
+				<p class="location">Phone Number: {{form.phone_number}}</p><!--This should get the location from the data base -->
+			{% endif %}
+			
+			<!-- Outputs location, unknown if it's 0, None or empty string  -->
+			{% if form.location == "0" %}
+				<p class="location">Location: Unknown</p><!--This should get the location from the data base -->
+			{% elif form.location == None%}
+				<p class="location">Location: Unknown</p><!--This should get the location from the data base -->
+			{% elif form.location == ""%}
+				<p class="location">Location: Unknown</p><!--This should get the location from the data base -->
+			{%else%}
+				<p class="location">Location: {{form.location}}</p><!--This should get the location from the data base -->
+			{% endif %}
+			
+			<!-- This button allows the profile to be deleted -->
+			<form id="forms" name="Delete" method="POST" action = "" >
+				{% csrf_token %}
+				<p><button name = "delete" value = "{{form.id}}" style = "font-weight:bold; background-color:red; color:black;" class="sidebyside">Delete Profile</button></p>
+			</form>
+			
+			<!-- This button allows the user to edit their profile -->
+			<form id="forms" name="Edit" method="POST" action = "" >
+				{% csrf_token %}
+				<p><button name = "edit" value = "{{form.id}}" style = "font-weight:bold;" class="sidebyside2">Edit Profile</button></p>
+			</form>
+		</div> 
+		  
+	</body>
+	
+{% endblock content %}

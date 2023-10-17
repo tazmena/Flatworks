@@ -1,0 +1,76 @@
+<!-- Extends the maintemp html -->
+{% extends 'flatworks/layouts/maintemp.html' %}
+
+
+<!-- This makes the title of the page add property and can be seen at the tab -->
+{% block title %}
+Add Property
+{% endblock title %}
+
+<!-- This is the contents of the page -->
+{% block content %}
+	<!-- This loads the static from the server for the css, js and media -->
+	{% load static %}
+		<link rel="stylesheet" href="{% static 'css/nav.css' %}">
+		<link rel="stylesheet" href="{% static 'css/add_prop.css' %}">
+		<script src="{% static 'js/nav.js' %}"></script>
+		
+	<!-- This is the head of the page and is the navbar of the page with the nav css and js working with it  -->
+	<head>
+		<div id="navigation" class = "navbar">
+			<ul id="navBar" >
+				<div id="navbar-left">
+					<!-- These are the links to other parts of the app -->
+					<li><a id = "filter" href="{% url 'filter' %}">Find Properties</a></li>
+					<li><a class="active" id = "add" href="{% url 'add-prop' %}">Add Property</a></li>
+					<li><a id = "see" href="{% url 'see-prop' %}">See Your Properties</a></li>
+					<li><a id = "profile" href="{% url 'see-prof' %}">My Profile</a></li>
+					<li><a id = "logout" href="{% url 'log-out' %}">Log Out</a></li>
+				</div>
+			</ul>
+		</div>
+	</head>
+	
+	
+	<body>
+		<div id="properties" >
+			<form id="form" name="property_form" method="POST" enctype="multipart/form-data" > <!-- form used to take in user input-->
+			<!-- Makes form valid in django -->
+			{% csrf_token %}
+			<fieldset >
+				
+					<h2 id = 'head' style = "color: #d9f1ff;font-weight:bold;">Add Property</h2>
+					
+					<!-- These output any messages onto the page -->
+					{% for message in messages %}
+						<div style = "color: #d9f1ff; font-size:2em; font-weight:bold;"  align = "center" class="alert alert-success" >
+							<a class="close" href="#" data-dismiss="alert"></a>
+							   {{ message }}
+						</div>
+					{% endfor %}
+					
+					<!-- This outputs all the fields in add property form so the client can enter them -->
+					{% for field in form %}
+					<br>
+						<div align = "center"  style = "color: #d9f1ff;" class="fieldWrapper">
+							{{ field.errors }}
+							{{ field.label_tag }}  
+							{{ field }}<br><br>
+							{% if field.help_text %}
+							<p class="help">{{ field.help_text|safe }}</p>
+							{% endif %}
+						</div>
+					{% endfor %}
+					
+					<!-- This is for allowing the user to upload an image file to the server for the property -->
+					<br><br><div class="fieldWrapper" style = "color: #d9f1ff;">
+						<input type = "file" name="image_file" id = "id_image_file"> 
+					</div>
+					<br><br><button type="submit" class="btn btn-primary btn-sm" value=""> Save</button>
+					
+				</fieldset>
+			</form>
+		</div>
+
+	</body>
+{% endblock content %}

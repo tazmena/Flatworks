@@ -1,0 +1,53 @@
+<!-- adds onto the html in maintemp -->
+{% extends 'flatworks/layouts/maintemp.html' %}
+
+<!-- The title of the page -->
+{% block title %}
+Sign Up
+{% endblock title %}
+<!-- The content of the page -->
+{% block content %}
+	<head>
+		<!-- This loads the static files to access the css -->
+		{% load static %}
+        <link rel="stylesheet" href="{% static 'css/signupPage.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/reset.css' %}" type="text/css">
+    </head>
+	
+    <body>
+		<div id="Sign Up">
+			<div id="box">
+				<legend> SIGN UP</legend><br>
+				<!-- This outputs the messages from server onto the page -->
+				{% for message in messages %}
+					<div  class="alert alert-success">
+						<a class="close" href="#" data-dismiss="alert"></a>
+						   {{ message }}
+					</div>
+				{% endfor %}
+				<!-- This creates the form for the sign up page with post sends the information to the server to save the user onto the database -->
+				<form method="POST">
+					<fieldset>
+						<!-- This is needed to make the form valid in django -->
+						{% csrf_token %}
+						<!-- This outputs the user sign up form -->
+						{% for field in form %}
+							<br><div class="fieldWrapper">
+								{{ field.errors }}
+								{{ field.label_tag }}  
+								{{ field }}<br><br>
+								{% if field.help_text %}
+								<p class="help">{{ field.help_text|safe }}</p>
+								{% endif %}
+							</div>
+						{% endfor %}
+						<!-- When this is pressed goes to login page -->
+						<br><div id="login"><a href="{% url 'log-in'%}">Already have an account?</a></div><br>
+						<!-- This submits the information to the server to save -->
+						<button type="submit" class="btn btn-primary btn-sm"> Create Account</button>
+					</fieldset>
+				</form>
+           </div>
+        </div>
+    </body>
+{% endblock content %}

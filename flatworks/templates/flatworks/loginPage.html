@@ -1,0 +1,54 @@
+<!-- Extend the maintemp html -->
+{% extends 'flatworks/layouts/maintemp.html' %}
+
+<!-- The title of the page so what goes on the tab -->
+{% block title %}
+Login Page
+{% endblock title %}
+
+<!-- The contents of the page -->
+{% block content %}    
+	<head>
+		<!-- Loads the static files needed, the css, from server -->
+		{% load static %}
+			<link rel="stylesheet" href="{% static 'css/loginPage.css' %}" type="text/css">
+			<link rel="stylesheet" href="{% static 'css/reset.css' %}" type="text/css">
+    </head>
+	<body>
+		<div id="login">
+			<div id="box">
+			<legend> LOGIN</legend>
+			<!-- Check if any messages exist and outputs it on the page if it does -->
+			<br>{% for message in messages %}
+			<div  class="alert alert-success">
+				<a class="close" href="#" data-dismiss="alert"></a>
+				{{ message }}
+			</div>
+			{% endfor %}
+				<!-- The sends the information that the client inputs to the server to check if account exists and is correct -->
+				<form method="POST">
+					<fieldset>
+						<!-- Makes the form valid in django -->
+						{% csrf_token %}
+						<!-- For each field in the form outputs the field with correct labels and error messages -->
+						{% for field in form %}
+							<br>
+							<div class="fieldWrapper">
+								{{ field.errors }}
+								{{ field.label_tag }}  
+								{{ field }}<br><br>
+								{% if field.help_text %}
+									<p class="help">{{ field.help_text|safe }}</p>
+								{% endif %}
+							</div>
+						{% endfor %}
+						 <!-- The user can create an account if they click on this -->
+						<br><div id="SignUp"><a href="{% url 'sign-up'%}">Create an Account</a></div><br>
+						<!-- Submits the form with the login information when the button is clicked -->
+						<button type="submit" class="btn btn-primary btn-sm">Login</button>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</body>
+{% endblock content %}
