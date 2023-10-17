@@ -1,0 +1,27 @@
+#box{
+    border-style: inset;
+    border: 5px solid rgba(219, 219, 219, 0.952);
+    position: absolute;
+    display: block;
+    top: 20%;
+    left:25%;
+    background-color: white;
+    padding: 5%;
+    border-radius: 15%;
+}
+
+body{
+    background-color: rgb(41, 90, 223);
+}
+legend{
+    position: relative;
+    top: -1em;
+    left: 3em;
+    font-weight:bold ;
+
+}
+#button{
+    position: relative;
+    left: 3em;
+    top: 2em
+}

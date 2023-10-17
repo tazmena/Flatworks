@@ -1,0 +1,67 @@
+
+body{
+    margin: 0%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#navBar{
+	overflow: hidden;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #1357a6;
+	position: fixed; /* Sticky/fixed navbar */
+	width: 100%;
+	top: 0; /* At the top */
+	z-index: 99;
+	left: 0%;
+}
+
+#navigation{
+	padding:80px 10px;
+}
+
+#navbar-left {
+	font-size:35px; 
+}
+
+li {
+    float: left;
+    
+}
+  
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 18px 20px;
+    text-decoration: none;
+}
+  
+li a:hover {
+    background-color: #1870d5;
+    text-decoration: underline;
+
+}
+
+.active{
+    background-color: #1870d5;
+}
+
+@media screen and (max-width: 580px) {
+  #navigation {
+    padding: 20px 10px !important; 
+  }
+  #navigation a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  #navigation-left {
+    float: none;
+  }
+}
+
+/* End of Navigation Bar */
