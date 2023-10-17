@@ -1,0 +1,81 @@
+/* TODO:
+- Need to make it responsive */
+
+/* Header */
+
+/* Navigation Bar */
+
+body{
+    margin: 0%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#navBar{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #1357a6;
+  
+}
+
+li {
+    float: left;
+    
+}
+  
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 18px 20px;
+    text-decoration: none;
+}
+  
+li a:hover {
+    background-color: #1870d5;
+    text-decoration: underline;
+
+}
+
+.active{
+    background-color: #1870d5;
+}
+
+/* End of Navigation Bar */
+
+/* Search Engine */
+#filters{
+    padding: 75px;
+    text-align: center;
+
+}
+
+h2#filterHead{
+    color: #d9f1ff;
+    font-size: 25pt;
+    font-weight: bolder;
+    text-align: center;
+
+ 
+}
+
+form{
+    border-radius: 5px;
+    background-color: #1357a6;
+    padding: 10px;
+  
+  }
+
+fieldset{
+    border: 3px solid #1b7ced;
+    padding: 20px;
+}
+
+label{
+    color: #d9f1ff;
+    font-size: 14pt;
+    font-weight: bolder;
+
+}
